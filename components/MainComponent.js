@@ -3,7 +3,9 @@ import Menu from './MenuComponent';
 import Home from './HomeComponent';
 import { View, Platform } from 'react-native';
 import Dishdetail from './DishdetailComponent';
-import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import Constants from 'expo-constants';
 
 
@@ -13,9 +15,9 @@ const MenuNavigator = createStackNavigator({
 },
 {
     initialRouteName: 'Menu',
-    navigationOptions: {
+    defaultNavigationOptions: {
         headerStyle: {
-            backgroundColor: "#512DA8"
+            backgroundColor: '#512DA8',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -28,42 +30,44 @@ const MenuNavigator = createStackNavigator({
 const HomeNavigator = createStackNavigator({
     Home: { screen: Home }
   }, {
-    navigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: {
       headerStyle: {
-          backgroundColor: "#512DA8"
+          backgroundColor: "#512DA8",
       },
       headerTitleStyle: {
           color: "#fff"            
       },
       headerTintColor: "#fff"  
-    })
+    }
 });
 
 const MainNavigator = createDrawerNavigator({
     Home: 
       { screen: HomeNavigator,
-        navigationOptions: {
+        defaultNavigationOptionss: {
           title: 'Home',
           drawerLabel: 'Home'
         }
       },
     Menu: 
       { screen: MenuNavigator,
-        navigationOptions: {
+        defaultNavigationOptions: {
           title: 'Menu',
           drawerLabel: 'Menu'
         }, 
       }
-}, {
+},{
   drawerBackgroundColor: '#D1C4E9'
 });
+
+const MainStack = createAppContainer(MainNavigator);
 
 class Main extends Component {
    
     render() {
         return(
             <View style={{flex:1, paddingTop: Platform.OS === 'ios' ? 0 : Constants.statusBarHeight }}>
-           <MainNavigator />
+           <MainStack />
         </View>
             
             );
