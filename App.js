@@ -1,25 +1,22 @@
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React, {Component} from 'react';
 import Main from './components/MainComponent';
+import { Provider } from 'react-redux';
+import { ConfigureStore } from './redux/configureStore';
+
+const store = ConfigureStore();
 
 
-
-/*<style type="text/css">{`
-  @font-face {
-    font-family: 'MaterialIcons';
-    src: url(${require('react-native-vector-icons/Fonts/MaterialIcons.ttf')}) format('truetype');
-  }
-
-  @font-face {
-    font-family: 'FontAwesome';
-    src: url(${require('react-native-vector-icons/Fonts/FontAwesome.ttf')}) format('truetype');
-  }
-`}</style>*/
 
 export default class App extends Component {
   render(){
     return(
-      <SafeAreaProvider><Main /></SafeAreaProvider>
+      <SafeAreaProvider>
+        <Provider store={store}>
+        <Main />
+        </Provider>
+      </SafeAreaProvider>
+      
     );
   }
 }

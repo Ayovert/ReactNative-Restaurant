@@ -4,6 +4,7 @@
   "expo": {
     "name": "my-app",
     "slug": "my-app",
+    "platforms": ["web"],
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
