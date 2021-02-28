@@ -1,10 +1,11 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { Component } from 'react';
-import { View, FlatList, ScrollView } from 'react-native';
+import { View, FlatList, ScrollView,Text } from 'react-native';
 import { Tile } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { Loading } from './LoadingComponent';
+
 
 
 const mapStateToProps = state => {
@@ -43,18 +44,33 @@ class Menu extends Component{
 
         const { navigate } = this.props.navigation;
 
-        return(
-            <SafeAreaView>
-                <View>
-            <FlatList 
-            data={this.props.dishes.dishes}
-            renderItem={renderMenuItem}
-            keyExtractor={item => item.id.toString()}
-            />
-            </View>
-            </SafeAreaView>
+        if(this.props.dishes.isLoading){
+            return(
+                <Loading />
+            );
+        }
+
+        else if(this.props.dishes.errMess){
+            return(
+                <Text>{this.props.dishes.errMess}</Text>
+            );
+        }
         
-         );
+        else{
+            return(
+                <SafeAreaView>
+                    <View>
+                <FlatList 
+                data={this.props.dishes.dishes}
+                renderItem={renderMenuItem}
+                keyExtractor={item => item.id.toString()}
+                />
+                </View>
+                </SafeAreaView>
+            
+             );
+        }
+        
     }
     
 }
