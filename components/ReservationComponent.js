@@ -152,8 +152,10 @@ class Reservation extends Component {
 
 
                 <View>
-          <View>
-             <Text> { new Date().toLocaleTimeString('en-US')}</Text>
+          <View style={styles.formRow}>
+          <Text style={styles.formLabel}>Time</Text>
+         
+          <Text style={styles.input}> { this.state.time.toLocaleTimeString('en-US')}</Text>
           </View>  
           <View>
             <Button onPress={showDatepicker} title="Show date picker!" />
@@ -166,7 +168,7 @@ class Reservation extends Component {
           {show && (
             <DateTimePicker
               testID="dateTimePicker"
-              value={this.state.time}
+              value= {new Date()}
               mode={mode}
               is24Hour={true}
               display="default"
@@ -206,7 +208,16 @@ const styles= StyleSheet.create({
     },
     formItem:{
         flex:1
-    }
+    },
+    input: {
+        alignItems: 'center',
+        height: 40,
+        width:100,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+        marginRight:22
+      }
 })
 
 export default Reservation;
