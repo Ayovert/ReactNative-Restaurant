@@ -171,8 +171,98 @@ function RenderComment(props) {
 };
  
 
+/*class Comment extends Component {
+    <Comment dishId={dishId} postComment={postComment} toggleCommentModal ={toggleCommentModal} 
+            showCommentModal = {showCommentModal}/>
+    constructor(props) {
+        super(props);
+        this.state = {
+           showCommentModal: false,
+            author: "",
+            comment: "",
+            rating: 3,
+        };
+    }
+
+    toggleCommentModal() {
+       this.setState({ showCommentModal: !this.state.showCommentModal });
+    }
+
+    setComment(value) {
+        this.setState({ comment: value })
+    }
+
+    setAuthor(value) {
+        this.setState({ author: value })
+    }
+
+    setRating(value) {
+        this.setState({ rating: value })
+    }
+
+    const handleCommentSubmit = () =>{
+        toggleCommentModal();
+        props.postComment( props.dishId, this.state.rating, this.state.author, this.state.comment);
+           
+        alert(rating + " " + author);
+    }
 
 
+
+    render() {
+        return (
+            <View>
+               
+                <Modal
+                    transparent={false}
+                    visible={this.props.showCommentModal}
+                    animationType={"slide"}
+                    onRequestClose={this.props.toggleCommentModal}
+                    onDismiss={this.props.toggleCommentModal}
+                >
+                    <View>
+                    <Rating
+                                    type='star'
+                                    ratingCount={5}
+                                    imageSize={60}
+                                    showRating
+                                    onFinishRating={(value) => this.setState({ rating: value })}
+                                    style={styles.input}
+                                    value={this.state.rating}
+                                />
+                        <Input
+                            placeholder="Author"
+                            leftIcon={{ type: 'font-awesome', name: 'user' }}
+                            style={styles.formRow}
+                            onChangeText={(value) => this.setState({ author: value })}
+                            value={this.state.author}
+                        />
+
+                        <Input
+                            placeholder="Comment"
+                            leftIcon={{ type: 'font-awesome', name: 'comment' }}
+                            style={styles.formRow}
+                            onChangeText={(value) => this.setComment(value)}
+                            value={this.state.author}
+                        />
+
+
+ <Button
+                            onPress={this.props.postComment}
+                            color="#512DA8"
+                            title="Submit"
+                        />                       
+ <Button
+                            onPress={this.props.toggleCommentModal}
+                            color="#512DA8"
+                            title="Close"
+                        />
+                    </View>
+                </Modal>
+            </View>
+        );
+    }
+}*/
 
 class Dishdetail extends Component {
     constructor(props) {
