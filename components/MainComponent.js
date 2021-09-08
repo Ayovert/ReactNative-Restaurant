@@ -4,9 +4,10 @@ import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
 import Reservation from './ReservationComponent';
+import Dishdetail from './DishdetailComponent';
+import Favorites from './FavoritesComponent';
 import { View, Platform, Image, StyleSheet, ScrollView, Text } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
-import Dishdetail from './DishdetailComponent';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
@@ -109,6 +110,34 @@ const AboutNavigator = createStackNavigator({
     />  
   })
 });
+
+const FavoritesNavigator = createStackNavigator({
+  Favorites: { screen: Favorites,
+    navigationOptions: ({ navigation }) => ({
+    
+      headerLeft:()=> <Icon 
+      name='menu' size={24}
+      color='white'
+      onPress={() => navigation.toggleDrawer()}
+    />
+  })
+  },
+  Dishdetail: { screen: Dishdetail }
+},
+{
+  initialRouteName: 'Favorites',
+  defaultNavigationOptions: {
+      headerStyle: {
+          backgroundColor: '#512DA8',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+          color: "#fff"            
+      }
+  }
+}
+);
+
 
 const ReservationNavigator = createStackNavigator({
   Reservation: { screen: Reservation }
@@ -228,6 +257,21 @@ const MainNavigator = createDrawerNavigator({
           drawerIcon: ({ tintColor }) => (
             <Icon 
             name="address-card"
+            type="font-awesome"
+            size={24}
+            color={tintColor}
+            />
+          )
+        }, 
+      },
+      Favorites: 
+      { screen: FavoritesNavigator,
+        navigationOptions: {
+          title: 'My Favorites',
+          drawerLabel: 'Favorites',
+          drawerIcon: ({ tintColor }) => (
+            <Icon 
+            name="heart"
             type="font-awesome"
             size={24}
             color={tintColor}
