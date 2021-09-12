@@ -1,6 +1,6 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { Component } from 'react';
-import { View, FlatList, ScrollView,Text } from 'react-native';
+import { View, FlatList, ScrollView,Text, Alert } from 'react-native';
 
 import Swipeout from 'react-native-swipeout';
 import { ListItem } from 'react-native-elements';
@@ -43,8 +43,28 @@ class Favorites extends Component{
                 {
                     text: 'Delete',
                     type: 'delete',
-                    onPress: () => this.props.deleteFavorite(item.id)
+                    onPress: () => {
+                        Alert.alert(
+                            'Delete Favorite?',
+                            'Are you sure you want to delete this favorite dish?',
+                            [
+                                {
+                                    text: 'Cancel',
+                                    onPress: () => console.log(item.name + 'was not deleted'),
+                                    style: 'cancel'
+                                },
+                                {
+                                    text:'Ok',
+                                    onPress: () => this.props.deleteFavorite(item.id)
+                                }
+                            ],
+                            { cancelable: false } 
+                        );
+                    }
                 }
+
+
+                
             ];
 
             return(
