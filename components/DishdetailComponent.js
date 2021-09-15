@@ -6,6 +6,7 @@ import { baseUrl } from '../shared/baseUrl';
 import { postComment, postFavorite } from '../redux/ActionCreators';
 import 'intl';
 import 'intl/locale-data/jsonp/en';
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {
     return {
@@ -41,6 +42,7 @@ function RenderDish(props) {
     if (dish != null) {
         return (
             <View>
+                <Animatable.View animation="fadeInDown" duration={2000}>
                 <Card
                     featuredTitle={dish.name}
                     image={{ uri: baseUrl + dish.image }}
@@ -126,6 +128,8 @@ function RenderDish(props) {
 
                     </View>
                 </Card>
+                </Animatable.View>
+
 
             </View>
 
@@ -166,6 +170,7 @@ function RenderComment(props) {
                 renderItem={renderCommentItem} 
             />
         </Card>
+        
     )
 };
  
@@ -233,7 +238,9 @@ class Dishdetail extends Component {
                 setRating= {(value) => this.setRating(value)}
                 
                 />
+                <Animatable.View animation="fadeInUp" duration={2000} delay={1000}>
                 <RenderComment comments={this.props.comments.comments.filter((comment) => comment.dishId === dishId)} />
+                </Animatable.View>
                 
             </ScrollView>
         );

@@ -5,6 +5,7 @@ import { ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { Loading } from './LoadingComponent';
+import * as Animatable from 'react-native-animatable';
 
 
 
@@ -27,15 +28,17 @@ class Menu extends Component{
         const renderMenuItem = ({item, index}) =>{
             return(
                  <View style={{flex:1}}>
+                     <Animatable.View animation="fadeInRightBig" duration={2000} delay={1000}>
                  <ListItem
                  key={index}
                  title={item.name}
                  subtitle={item.description}
-                 hideChevron={true}
+                 hideChevron={false}
                  onPress={() => navigate('Dishdetail', { dishId: item.id })}
                  leftAvatar={{source:{uri: baseUrl + item.image}}}
                 
                 />
+                </Animatable.View>
                 </View>
                 
             );
