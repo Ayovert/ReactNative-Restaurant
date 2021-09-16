@@ -36,8 +36,16 @@ function RenderDish(props) {
     const setComment = props.setComment;
 
     handleRefView = ref => this.view = ref; 
+
     const recognizeDrag = ({moveX, moveY, dx, dy}) => {
         if ( dx < -200)
+        return true;
+        else
+        return false;
+    };
+
+    const recognizeComment = ({moveX, moveY, dx, dy}) => {
+        if ( dx > 200)
         return true;
         else
         return false;
@@ -53,6 +61,7 @@ function RenderDish(props) {
         },
         onPanResponderEnd: (e, gestureState) => {
             if(recognizeDrag(gestureState))
+            {
             Alert.alert(
                 'Add to Favorites?',
                 'Are you sure you wish to add ' + props.dish.name + ' to your favorites?',
@@ -71,7 +80,15 @@ function RenderDish(props) {
                 { cancelable: false } 
 
             )
+            }
+            if(recognizeComment(gestureState))
+            {
+           toggleCommentModal();
+            }
             return true;
+
+            
+            
         }
     });
    
@@ -106,7 +123,7 @@ function RenderDish(props) {
                             type='font-awesome'
                             onPress={toggleCommentModal}
                         />
-
+                       
                         <Modal
                             transparent={false}
                             visible={showCommentModal}
@@ -165,6 +182,8 @@ function RenderDish(props) {
                                 </View>
                             </View>
                         </Modal>
+                        
+                        
 
                     </View>
                 </Card>
