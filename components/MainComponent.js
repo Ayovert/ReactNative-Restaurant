@@ -6,6 +6,7 @@ import About from './AboutComponent';
 import Reservation from './ReservationComponent';
 import Dishdetail from './DishdetailComponent';
 import Favorites from './FavoritesComponent';
+import Login from './LoginComponent';
 import { View, Platform, Image, StyleSheet, ScrollView, Text } from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import { createAppContainer } from 'react-navigation';
@@ -15,6 +16,7 @@ import Constants from 'expo-constants';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
+
 
 const mapStateToProps = state => {
     return {
@@ -158,6 +160,26 @@ const ReservationNavigator = createStackNavigator({
   })
 });
 
+
+const LoginNavigator = createStackNavigator({
+  Login: { screen: Login }
+}, {
+  defaultNavigationOptions: ({ navigation }) => ({
+    headerStyle: {
+        backgroundColor: "#512DA8",
+    },
+    headerTitleStyle: {
+        color: "#fff"            
+    },
+    headerTintColor: "#fff",
+    headerLeft: ()=><Icon 
+    name='menu' size={24}
+    color='white'
+    onPress={() => navigation.toggleDrawer()}
+    />  
+  })
+});
+
 const CustomDrawerContentComponent = (props) => (
   <ScrollView>
     <SafeAreaView
@@ -204,6 +226,21 @@ const styles = StyleSheet.create({
 });
 
 const MainNavigator = createDrawerNavigator({
+  Login: 
+      { screen: LoginNavigator,
+        navigationOptions: {
+          title: 'Login',
+          drawerLabel: 'Login',
+          drawerIcon: ({ tintColor }) => (
+            <Icon 
+            name="sign-in"
+            type="font-awesome"
+            size={24}
+            color={tintColor}
+            />
+          )
+        }
+      },
     Home: 
       { screen: HomeNavigator,
         navigationOptions: {
@@ -294,7 +331,9 @@ const MainNavigator = createDrawerNavigator({
           )
         }, 
       }
+      
 },{
+  initialRouteName:'Home',
   drawerBackgroundColor: '#D1C4E9',
   contentComponent: CustomDrawerContentComponent
 });
