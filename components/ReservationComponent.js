@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef, useRef } from 'react';
 import { Text, View, ScrollView, StyleSheet, Switch, Button, Platform, TextInput, Modal, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Card, Input } from 'react-native-elements';
@@ -6,7 +6,16 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
 import { Icon } from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
+import * as Notifications  from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
 
+Notifications.setNotificationHandler({
+    handleNotification: async() => ({
+        shouldShowAlert: true,
+        shouldPlaySound:true,
+        shouldSetBadge: false
+    })
+});
 
 class Reservation extends Component {
     constructor(props) {
@@ -16,21 +25,48 @@ class Reservation extends Component {
             smoking: false,
             date: "",
             time: new Date(),
+            expoPushToken: "",
+            notification: false
            // showModal: false
         }
+
+       // this.notificationListener = createRef();
+        //this.responseListener = createRef();
+        //const notificationListener = useRef();
+        //const responseListener = useRef();
     }
 
     static navigationOptions = {
         title: 'Reserve A Table'
     }
 
+    componentDidMount(){
+        //registerForPushNotificationsAsync().then(token => this.setState({expoPushToken: token}));
+    
+        if(this.state.notification !=null)
+        {
+            let notificationListener = Notifications.addNotificationReceivedListener(notification => {
+                this.setState({notification: notification});
+              });
 
+              let responseListener = Notifications.addNotificationResponseReceivedListener(response => {
+                console.log(response);
+              });
+              Notifications.removeNotificationSubscription(notificationListener);
+          Notifications.removeNotificationSubscription(responseListener);
+        }
+        
+    
+      
+          
+      }
+        
 
     handleReservation() {
         console.log("{Guests: "+ JSON.stringify(this.state.guests)+ "," +
         "\nSmoking: "+ JSON.stringify(this.state.smoking)+ ","  +
         "\nDate: "+ JSON.stringify(this.state.date)+ "," +
-        "\nTime: "+JSON.stringify(this.state.time.toLocaleTimeString('en-US')) + "}")
+        "\nTime: "+JSON.stringify(this.state.time.toLocaleTimeString('en-US')) + "}");
        // this.toggleModal();
 
     }
@@ -44,6 +80,90 @@ class Reservation extends Component {
         });
     }
 
+
+    /*async obtainNotificationPermission()
+    {
+        let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS)
+
+        if(permission.status !== 'granted')
+        {
+            permission = await Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS);
+            if(permission.status !== 'granted')
+            {
+                Alert.alert('Permission not granted to show notification');
+            }
+
+            return permission;
+
+        }
+    }*/
+
+    async  registerForPushNotifications() {
+        let permission = await Notifications.getPermissionsAsync();
+
+        if(permission.status !== 'granted')
+        {
+            permission = await Notifications.requestPermissionsAsync();
+            if(permission.status !== 'granted')
+            {
+                Alert.alert('Permission not granted to show notification');
+            }
+
+            if (Platform.OS === 'android') {
+                Notifications.setNotificationChannelAsync('default', {
+                  name: 'default',
+                  importance: Notifications.AndroidImportance.MAX,
+                  vibrationPattern: [0, 250, 250, 250],
+                  lightColor: '#FF231F7C',
+                });
+              }
+
+            return permission;
+
+        }
+
+    }
+
+
+    async schedulePushNotification(date) {
+        await this.registerForPushNotifications();
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: 'Your Reservation',
+            body:  'Reservation for' + date + 'request',
+            ios: {
+                sound: true
+            },
+
+            android:{
+                vibrate:true,
+                sound:true
+            }
+          },
+          trigger: { seconds: 2 },
+        });
+      }
+
+
+
+
+    /*async presentLocalNotifications(date)
+    {
+        await this.obtainNotificationPermission();
+        Notifications.getPresentedNotificationsAsync({
+            title: 'Your Reservation',
+            body: 'Reservation for' + date + 'request',
+            ios: {
+                sound: true
+            },
+
+            android:{
+                vibrate:true,
+                sound:true
+            }
+        })
+    }*/
+    
     toggleModal() {
         this.setState({ showModal: !this.state.showModal })
     }
@@ -80,7 +200,11 @@ class Reservation extends Component {
         const { mode } = this.state;
 
         const { onClose } = this.props;
-        // const { show } = this.state;
+
+        
+
+        
+       // const { show } = this.state;
         return (
             <ScrollView>
                 <Animatable.View animation="zoomIn" duration={2000} delay={1000}>
@@ -190,7 +314,12 @@ class Reservation extends Component {
                                     },
                                     {
                                         text:'Ok',
-                                        onPress: () => {this.handleReservation(), this.resetForm()}
+                                        onPress: () => {
+                                            
+                                            this.handleReservation(),
+                                            this.schedulePushNotification(this.state.date)
+                                            
+                                        this.resetForm()}
                                     }
                                 ],
                                 { cancelable: false } 
