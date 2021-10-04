@@ -49,6 +49,7 @@ function RenderContact(props){
 
 
 class Contact extends Component {
+ 
 
     sendMail(){
         MailComposer.composeAsync({
