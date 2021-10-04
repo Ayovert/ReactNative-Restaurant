@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import { View, Text } from 'react-native';
-import { Card } from 'react-native-elements';
+import { Card, Button, Icon } from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
+import * as MailComposer from 'expo-mail-composer';
 
-function RenderContact(){
+function RenderContact(props){
 
+    
     
         return(
             <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
@@ -29,6 +31,17 @@ function RenderContact(){
                  <Text style={{margin: 10}}>
                  Email:confusion@food.net
                 </Text>
+
+                <Button
+                title = 'Send Email'
+                buttonStyle = {{backgroundColor: '#512DA8'}}
+                icon={<Icon name='envelope-o' type='font-awesome' color='white'
+                iconStyle ={{paddingRight: 20}}
+                />}
+
+                onPress={props.sendMail}
+                />
+             
             </Card>
             </Animatable.View>
         );
@@ -36,17 +49,40 @@ function RenderContact(){
 
 
 class Contact extends Component {
+   /*
+   /*  <Button
+                title = 'Send Email'
+                buttonStyle = {{backgroundColor: '#512DA8'}}
+                icon={<Icon name='envelope-o' type='font-awesome' color='white' />}
 
+                onPress={props.sendMail}
+                />*
+   sendMail(){
+        MailComposer.composeAsync({
+            recipients: ['ayobami11@gmail.com'],
+            subject: 'Enquiry',
+            body: 'To whom it may concern'
+            
+        })
+    }*/
 
-    static navigationOptions = {
-        title: 'Contact Us'
-    };
+    sendMail(){
+        MailComposer.composeAsync({
+            recipients: ['ayobamijimoh11@gmail.com'],
+            subject: 'Enquiry',
+            body: 'To whom it may concern'
+            
+        })
+    }
     
     render(){
         return(
             
             <View>
-            <RenderContact />
+            <RenderContact
+            
+            sendMail = {()=> this.sendMail()}
+            />
             </View>
         );
     }
