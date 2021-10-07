@@ -40,11 +40,14 @@ class Reservation extends Component {
         title: 'Reserve A Table'
     }
 
-    componentDidMount(){
+
+    shouldComponentUpdate(){
+        return this.state.notification !=null;
+    }
+        
+    componentDidUpdate(){
         //registerForPushNotificationsAsync().then(token => this.setState({expoPushToken: token}));
     
-        if(this.state.notification !=null)
-        {
             let notificationListener = Notifications.addNotificationReceivedListener(notification => {
                 this.setState({notification: notification});
               });
@@ -54,13 +57,9 @@ class Reservation extends Component {
               });
               Notifications.removeNotificationSubscription(notificationListener);
           Notifications.removeNotificationSubscription(responseListener);
-        }
-        
-    
-      
-          
-      }
-        
+    }
+
+  
 
     handleReservation() {
         console.log("{Guests: "+ JSON.stringify(this.state.guests)+ "," +
@@ -136,8 +135,8 @@ class Reservation extends Component {
             },
 
             android:{
-                vibrate:true,
-                sound:true
+                 vibrate:true,
+                 sound:true
             }
           },
           trigger: { seconds: 2 },
